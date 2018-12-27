@@ -1,0 +1,201 @@
+<import src="../../wxParse/wxParse.wxml"></import>
+  <view class="container" wx:if="{{detail.goods_id}}">
+    <scroll-view bindscroll="scroll" scroll-top="{{scrollTop}}" scroll-y="true" style="position:absolute;top:16rpx;left:0;bottom:104rpx;right:0">
+    <view class='js-channel-topLine'></view>
+    <view bindtap="imgPreview">
+      <swiper autoplay="{{autoplay}}" current="{{currentIndex}}" class="banner-box swiper-box" duration="{{duration}}" indicator-dots="{{takeTurnImg.length!=1?true:false}}" indicator-active-color='#000' interval="{{interval}}" circular="{{true}}">
+        <swiper-item wx:for="{{takeTurnImg}}" wx:key="this" catchtouchmove="{{takeTurnImg.length!=1?'':'stopTouchMove'}}">
+          <view class="image-box">
+            <image class="slide-image" mode="aspectFit" src="{{item.file_path}}"></image>
+          </view>
+        </swiper-item>
+      </swiper>
+    </view>
+    <view class="cont-block-box">
+      <view class="cont-box b-f">
+        <view class='js-cont-box'>
+          <text class="twolist-hidden">{{detail.goods_name}}</text>
+          <text class="f-32">{{milliliter}}</text>
+          <text class="num">￥{{goods_price}}</text>
+          <!-- <view class="money-box"> <text class="num">￥{{goods_price}}</text> <text class="del" wx:if="{{line_price>0}}">￥{{line_price}}</text> </view> -->
+          <!-- <view class="goods-sales-box f-28 dis-flex"> <text class="flex-box num">销量：{{detail.goods_sales}}</text> <text class="flex-box stock">库存：{{stock_num}}</text> </view> -->
+        </view>
+      </view>
+
+      <!-- <view bindtap="onChangeShowState" class="cont-box b-f goods-property-box m-top20"> <text class="col-3 f-30">已选</text> <text class="col-3 f-30 pl-12">{{goods_num}} 个</text> <view class="goods-property-jianTou"> <text class="iconfont
+      icon-xiangyoujiantou user-orderJtou-1 {{showView?'user-orderJtou-2':''}}"></text> </view> </view> -->
+      <view wx:if="{{isGoodsType.Ml}}" class="cart bright789_view_hide {{showView?'bright789_view_show':''}}">
+        <view class="modal_cont_box">
+          <scroll-view scroll-y="true">
+            <view class="goods-list-box" style="{{specData.spec.length<3?'justify-content:center':'justify-content:flex-start'}}">
+              <block wx:for="{{specData.spec}}" wx:for-index="item_idx" wx:key="ikey">
+                <view class="cf cartypelist car-type-box">
+                  <view wx:if="{{item.checked}}">
+                    <view bindtap="modelTap" class="cartypeitem cur cartypelist-box" data-item-idx="{{item_idx}}">{{item.other_name}}</view>
+                  </view>
+                  <view wx:else="wx:else">
+                    <view bindtap="modelTap" class="cartypeitem cartypelist-box" data-item-idx="{{item_idx}}">{{item.other_name}}</view>
+                  </view>
+                </view>
+              </block>
+            </view>
+          </scroll-view>
+        </view>
+      </view>
+
+      <view wx:if="{{isGoodsType.Makeup}}" class="cart bright789_view_hide {{showView?'bright789_view_show':''}}">
+        <view class="modal_cont_box">
+          <scroll-view class="goods-list-box" scroll-y="true">
+            <view class="color-list-box">
+              <view class="box-box">
+                <view class="cf tmall-types tmall-types-img color-block-box" style="{{isWidth?'justify-content: flex-start;':'justify-content: center;'}}">
+                  <block wx:for="{{specData.spec}}" wx:for-index="item_idx" wx:key="ikey">
+                    <block wx:if="{{item.checked}}">
+                      <view bindtap="modelTap" class="cartypeitem cur cartypeitemicon" data-attr-idx="{{attr_idx}}" data-item-idx="{{item_idx}}">
+                        <image class='js-makeUp-images' src='{{item.color_img_path}}'></image>
+                      </view>
+                    </block>
+                    <view wx:else="wx:else">
+                      <view bindtap="modelTap" class="cartypeitem cartypeitemicon" data-attr-idx="{{attr_idx}}" data-item-idx="{{item_idx}}">
+                        <image class='js-makeUp-images' src='{{item.color_img_path}}'></image>
+                      </view>
+                    </view>
+                  </block>
+                </view>
+              </view>
+              <image wx:if="{{isShowBox}}" class='js-makeUp-images js-makeUp-imgLeft' src='/images/topList.png' bindtap='colorListShow'></image>
+            </view>
+          </scroll-view>
+        </view>
+      </view>
+      <block wx:if="{{isGoodsType.SkinCare}}"></block>
+
+      <!-- <view class='js-makeUp-view'> <view class='js-makeUp-content'> <view class='js-makeUp-icon' bindtap="modelTap"> <image class='js-makeUp-images' src='/images/1.jpg'></image> </view> </view> <view class='js-makeUp-content1' bindtap="modelTap">
+      <view class='js-makeUp-icon'> <image class='js-makeUp-images' src='/images/2.jpg'></image> </view> </view> <view class='js-makeUp-content1' bindtap="modelTap"> <view class='js-makeUp-icon'> <image class='js-makeUp-images' src='/images/3.jpg'></image>
+      </view> </view> <view class='js-makeUp-content1' bindtap="modelTap"> <view class='js-makeUp-icon'> <image class='js-makeUp-images' src='/images/4.jpg'></image> </view> </view> <view class='js-makeUp-content1' bindtap="modelTap"> <view
+      class='js-makeUp-icon'> <image class='js-makeUp-images' src='/images/5.jpg'></image> </view> </view> <view class="js-makeUp-content1"> <view class='js-makeUp-icon'> <image class='js-makeUp-images' src='/images/topList.png'
+      bindtap='colorListShow'></image> </view> </view> </view> -->
+
+      <!-- 多彩样式弹窗 -->
+      <view wx:if="{{isGoodsType.Makeup}}" class="colorList-demo {{colorListShow?'colorListShow':'colorListHide'}}">
+        <view class='colorList-view'>
+          <image class='colorList-image' src='/images/bottomList.png' bindtap='colorListHide'></image>
+        </view>
+        <view class='colorList-view-content'>
+          <text class='colorList-view-title'>{{milliliter}}</text>
+          <!-- <text class='colorList-view-details'>限量色</text> -->
+        </view>
+
+        <view class='colorList-List'>
+          <view class="cf tmall-types tmall-types-img1">
+
+            <view class="cf cartypelist" wx:for="{{specData.spec}}" wx:for-index="item_idx" wx:key="ikey">
+              <view wx:if="{{item.checked}}">
+                <view bindtap="modelTap" class="cartypeitem cur cartypeitemicon" data-attr-idx="{{attr_idx}}" data-item-idx="{{item_idx}}">
+                  <image class='js-makeUp-images' src='{{item.color_img_path}}'></image>
+                </view>
+              </view>
+              <view wx:else="wx:else">
+                <view bindtap="modelTap" class="cartypeitem cartypeitemicon" data-attr-idx="{{attr_idx}}" data-item-idx="{{item_idx}}">
+                  <image class='js-makeUp-images' src='{{item.color_img_path}}'></image>
+                </view>
+              </view>
+            </view>
+          </view>
+          <!-- <image class='colorList-imageList' bindtap="modelTap" src='/images/1.jpg'></image> <image class='colorList-imageList' bindtap="modelTap" src='/images/2.jpg'></image> <image class='colorList-imageList' bindtap="modelTap"
+          src='/images/3.jpg'></image> <image class='colorList-imageList' bindtap="modelTap" src='/images/4.jpg'></image> <image class='colorList-imageList' bindtap="modelTap" src='/images/5.jpg'></image> <image class='colorList-imageList' bindtap="modelTap"
+          src='/images/6.jpg'></image> <image class='colorList-imageList' bindtap="modelTap" src='/images/7.jpg'></image> <image class='colorList-imageList' bindtap="modelTap" src='/images/1.jpg'></image> <image class='colorList-imageList' bindtap="modelTap"
+          src='/images/2.jpg'></image> <image class='colorList-imageList' bindtap="modelTap" src='/images/3.jpg'></image> <image class='colorList-imageList' bindtap="modelTap" src='/images/4.jpg'></image> <image class='colorList-imageList' bindtap="modelTap"
+          src='/images/5.jpg'></image> <image class='colorList-imageList' bindtap="modelTap" src='/images/6.jpg'></image> <image class='colorList-imageList' bindtap="modelTap" src='/images/7.jpg'></image> -->
+        </view>
+      </view>
+    </view>
+
+    <view>
+      <view class='js-shopping-content'>
+        <view class='js-shopping-details'>
+          <view class='js-title-18 js-line-height24 effect-content'>
+            <rich-text nodes="{{describeTitle}}"></rich-text>
+          </view>
+          <view wx:for='{{describeContent}}' wx:key="index" class='js-title-28 js-content-color-gray js-content-details-effect'>
+            <rich-text nodes="{{item}}"></rich-text>
+          </view>
+          <!-- <view class='js-title-24 js-content-color-gray js-content-details-effect'>三效合一配方：焕活肌肤丶抑制黑色素丶修复肌肤屏障。连续使用肌肤由内而外绽放健康晶澈光彩。</view> -->
+        </view>
+      </view>
+
+      <view class='js-shopping-content1' wx:if="{{goodGift}}">
+        <view class='js-shopping-details'>
+          <view class='js-title-18 js-line-height24 effect-content'>3天体验装赠品</view>
+          <block wx:for="{{giftList}}" wx:for-item="item" wx:key="index">
+            <view class='js-title-28 js-content-color-gray js-content-details-effect'>{{item.goods_gift.gift_name}} x 1</view>
+          </block>
+        </view>
+      </view>
+
+      <view class='js-shopping-content1'>
+        <view class='js-shopping-details'>
+          <view class='js-title-24 js-content-color-gray js-content-details-effect'>
+            如需帮助，欢迎拨打客服热线
+            <text catchtap="callPhone" data-phonenum="4009-555-888">4009-555-888</text>
+          </view>
+        </view>
+      </view>
+
+      <view class='js-shopping-content1' wx:if="{{goodStar}}">
+        <view class='js-shopping-details'>
+          <view class='js-title-18 gift-idio-title effect-content'>明星产品搭档</view>
+          <view wx:for="{{CollocateData}}" wx:key="index" class='js-title-24 js-content-color-gray js-content-details-effect' data-id='{{item.goods_id}}' bindtap="swipclick">
+
+            <view class='gift-images'>
+              <image mode="aspectFit" src='{{goodStarImg}}'></image>
+            </view>
+
+            <view class='gift-details'>
+              <view class='gift-details-title'>{{item.goods_name}}</view>
+              <view class='gift-details-color'>{{item.spec_num||item.spec.length}}色选择</view>
+              <view class='gift-details-price'>￥{{goodStarPrice}}</view>
+            </view>
+
+          </view>
+        </view>
+      </view>
+
+    </view>
+
+    <!-- 商品描述 -->
+    <!-- <view class="p-bottom"> <view class="top-nav m-top20 b-f b-b"> <view class="top-nav-bar"> <view bindtap="toOrder" id="top-nav-bar-true"> <span>商品描述</span> </view> </view> </view> <view class="order" hidden="{{hiddenOrder}}"> <view
+    wx:if="{{detail.content!=''}}"> <view class="b-f goods-detail-box"> <view class="goods-cont-li"> <template is="wxParse" data="{{wxParseData:content.nodes}}"></template> </view> </view> </view> <view wx:else> <view class="yoshop-notcont"> <text
+    class="iconfont icon-meiyougengduo"></text> <text class="cont">亲,此处暂无详情数据</text> </view> </view> </view> </view> -->
+    </scroll-view>
+  </view>
+
+<!-- 底部操作栏 -->
+<block wx:if="{{isSuccess}}">
+  <view class="footer-fixed f-30 js-footer-content">
+    <view class="footer-left-box">
+      <view class="goods-fixed-icon1" bindtap="redirectHome">
+        <image class="flow-img" src="../../images/Symbol/Home-1.svg"></image>
+        <text>首页</text>
+      </view>
+
+      <navigator url="../flow/index" hover-class="none" style="display: inline-block; width:50%; height: 100%;">
+        <view bindtap="flowCart" class="goods-fixed-icon1">
+          <image class="flow-img" src="../../images/Symbol/Cart.svg"></image>
+          <view class="flow_num" wx:if="{{cart_total_num > 0}}">
+            <text>{{cart_total_num}}</text>
+          </view>
+          <text>购物袋</text>
+        </view>
+      </navigator>
+    </view>
+
+    <view class="footer-right-box">
+        <view bindtap="submit" class="order-number" style="{{stock_num?'display:block':'display:none'}}" data-type="addCart">加入购物车</view>
+        <view bindtap="submit" class="order-bt}}" style="{{stock_num?'display:block':'display:none'}}" data-type="buyNow">立即购买</view>
+        <view wx:if="{{isNull}}" class="default-btn" style="wdata-typeth:100%;{{stock_num?'display:none':'display:block'}}">暂已售罄</view>
+    </view>
+  </view>
+</block>
+
+<view class='js-top-tips-view' wx:if="{{isAddCart}}">{{tipContent}}</view>
