@@ -4,31 +4,38 @@
       <a-form layout="inline">
         <a-row :gutter="48">
           <a-col :md="8" :sm="24">
-            <a-form-item label="规则编号">
-              <a-input placeholder=""/>
+            <a-form-item label="文章ID">
+              <a-input placeholder="请输入"/>
             </a-form-item>
           </a-col>
           <a-col :md="8" :sm="24">
-            <a-form-item label="使用状态">
-              <a-select placeholder="请选择" default-value="0">
+            <a-form-item label="作者">
+              <a-input placeholder="请输入"/>
+              <!-- <a-select placeholder="请选择" default-value="0">
                 <a-select-option value="0">全部</a-select-option>
                 <a-select-option value="1">关闭</a-select-option>
                 <a-select-option value="2">运行中</a-select-option>
-              </a-select>
+              </a-select> -->
             </a-form-item>
           </a-col>
           <template v-if="advanced">
             <a-col :md="8" :sm="24">
-              <a-form-item label="调用次数">
+              <!-- <a-form-item label="调用次数">
                 <a-input-number style="width: 100%"/>
+              </a-form-item> -->
+              <a-form-item label="标题">
+                <a-input placeholder="请输入"/>
               </a-form-item>
             </a-col>
             <a-col :md="8" :sm="24">
-              <a-form-item label="更新日期">
+              <a-form-item label="标签">
+                <a-input placeholder="请输入"/>
+              </a-form-item>
+              <!-- <a-form-item label="更新日期">
                 <a-date-picker style="width: 100%" placeholder="请输入更新日期"/>
-              </a-form-item>
+              </a-form-item> -->
             </a-col>
-            <a-col :md="8" :sm="24">
+            <!-- <a-col :md="8" :sm="24">
               <a-form-item label="使用状态">
                 <a-select placeholder="请选择" default-value="0">
                   <a-select-option value="0">全部</a-select-option>
@@ -44,7 +51,7 @@
                   <a-select-option value="1">关闭</a-select-option>
                   <a-select-option value="2">运行中</a-select-option>
                 </a-select>
-              </a-form-item>
+              </a-form-item> -->
             </a-col>
           </template>
           <a-col :md="!advanced && 8 || 24" :sm="24">
@@ -62,7 +69,7 @@
     </div>
 
     <div class="table-operator">
-      <a-button type="primary" icon="plus" @click="() => $router.push({name: 'anime-add'})">新建菜单</a-button>
+      <a-button type="primary" icon="plus" @click="() => $refs.modal.edit('add')">添加</a-button>
       <a-dropdown v-if="selectedRowKeys.length > 0">
         <a-menu slot="overlay">
           <a-menu-item key="1"><a-icon type="delete" />删除</a-menu-item>
@@ -96,32 +103,35 @@
       </template>
       <template slot="action" slot-scope="text, record, index">
         <div class='editable-row-operations'>
-          <span v-if="record.editable">
+          <!-- <span v-if="record.editable">
             <a @click="() => save(record)">保存</a>
             <a-divider type="vertical" />
             <a-popconfirm title='真的放弃编辑吗?' @confirm="() => cancel(record)">
               <a>取消</a>
             </a-popconfirm>
-          </span>
-          <span v-else>
-            <a class="edit" @click="() => edit(record)">修改</a>
+          </span> -->
+          <!-- <span v-else> -->
+            <a class="edit" @click="() => $refs.modal.edit(record)">修改</a>
             <a-divider type="vertical" />
             <a class="delete" @click="() => del(record)">删除</a>
-          </span>
+          <!-- </span> -->
         </div>
       </template>
     </s-table>
+
+    <TipPage ref="modal" @ok="handleOk"></TipPage>
 
   </a-card>
 </template>
 
 <script>
   import STable from '@/components/table/'
-
+  import TipPage from './Tippage'
   export default {
     name: 'TableList',
     components: {
-      STable
+      STable,
+      TipPage
     },
     data () {
       return {
@@ -132,35 +142,44 @@
         // 表头
         columns: [
           {
-            title: '规则编号',
+            title: '文章ID',
             dataIndex: 'no',
             width: 90
           },
           {
-            title: '描述',
+            title: '文章标签',
             dataIndex: 'description',
             // scopedSlots: { customRender: 'description' },
           },
           {
-            title: '服务调用次数',
+            title: '文章标题',
             dataIndex: 'callNo',
-            width: '150px',
+            // width: '150px',
             // sorter: true,
             // needTotal: true,
             // scopedSlots: { customRender: 'callNo' },
             // customRender: (text) => text + ' 次'
           },
           {
-            title: '状态',
+            title: '作者',
+            dataIndex: 'callNo',
+            // width: '150px',
+            // sorter: true,
+            // needTotal: true,
+            // scopedSlots: { customRender: 'callNo' },
+            // customRender: (text) => text + ' 次'
+          },
+          {
+            title: '发布状态',
             dataIndex: 'status',
-            width: '100px',
+            // width: '100px',
             // needTotal: true,
             // scopedSlots: { customRender: 'status' },
           },
           {
-            title: '更新时间',
+            title: '上传时间',
             dataIndex: 'updatedAt',
-            width: '150px',
+            // width: '150px',
             // sorter: true,
             // scopedSlots: { customRender: 'updatedAt' },
           },
@@ -168,7 +187,7 @@
             title: '管理操作',
             table: '操作',
             dataIndex: 'action',
-            width: '120px',
+            // width: '120px',
             scopedSlots: { customRender: 'action' },
           }
         ],
@@ -191,9 +210,9 @@
         console.log(value, key, column)
       },
       edit (row) {
-        row.editable = true
+        // row.editable = true
         // row = Object.assign({}, row)
-        this.$refs.table.updateEdit()
+        // this.$refs.table.updateEdit()
       },
       // eslint-disable-next-line
       del (row) {
@@ -222,6 +241,10 @@
       cancel (row) {
         delete row.editable
         this.$refs.table.updateEdit()
+      },
+      handleOk () {
+        // 新增/修改 成功时，重载列表
+        this.$refs.table.refresh()
       },
 
       onChange (row) {

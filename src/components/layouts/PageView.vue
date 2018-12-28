@@ -1,5 +1,5 @@
 <template>
-  <page-layout :desc="description" :link-list="linkList" :search="search" :tabs="tabs">
+  <page-layout :desc="description" :title="getTitle" :link-list="linkList" :search="search" :tabs="tabs">
     <!-- keep-alive  -->
     <route-view ref="content"></route-view>
   </page-layout>

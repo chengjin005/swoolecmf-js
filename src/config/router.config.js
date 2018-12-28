@@ -52,13 +52,13 @@ export const asyncRouterMap = [
                 path: '/dashboard/monitor/syfile',
                 name: 'MonitorSyfile',
                 component: () => import('@/views/dashboard/Monitor/Syfile'),
-                meta: { title: '文件配置tab'}
+                meta: { title: '文件存储配置tab'}
               },
               {
                 path: '/dashboard/monitor/sypic',
                 name: 'MonitorSypic',
                 component: () => import('@/views/dashboard/Monitor/Sypic'),
-                meta: { title: '图片配置tab'}
+                meta: { title: '图片上传配置tab'}
               },
             ]
           },
@@ -115,7 +115,7 @@ export const asyncRouterMap = [
       {
         path: '/profile',
         name: 'profile',
-        component: RouteView,
+        component: PageView,
         redirect: '/profile/basic',
         meta: { title: '权限管理', icon: 'insurance', permission: [ 'profile' ] },
         children: [
@@ -146,7 +146,7 @@ export const asyncRouterMap = [
       {
         path: '/result',
         name: 'result',
-        component: RouteView,
+        component: () => import('@/views/form/AdminLogin'),
         meta: { title: '管理员登陆', icon: 'team', permission: [ 'result' ] }
       }
     ]

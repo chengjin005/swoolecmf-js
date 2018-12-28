@@ -180,11 +180,11 @@ export default {
       // 使用账户密码登陆
       if (that.customActiveKey === 'tab1') {
         that.form.validateFields(['username', 'password'], { force: true }, (err, values) => {
-          // if (!err) {
+          if (!err) {
             flag = true
             loginParams[!that.loginType ? 'email' : 'username'] = values.username
             loginParams.password = md5(values.password)
-          // }
+          }
         })
         // 使用手机号登陆
       } else {
@@ -196,7 +196,7 @@ export default {
         })
       }
 
-      // if (!flag) return
+      if (!flag) return
 
       that.loginBtn = true
 
@@ -205,14 +205,14 @@ export default {
         .then(() => {
           if (that.requiredTwoStepCaptcha) {
             that.loginSuccess()
-            // that.stepCaptchaVisible = true
+            that.stepCaptchaVisible = true
           } else {
             that.loginSuccess()
           }
         })
         .catch(err => {
-          that.loginSuccess()
-          // that.requestFailed(err)
+          // that.loginSuccess()
+          that.requestFailed(err)
         })
     },
     getCaptcha(e) {

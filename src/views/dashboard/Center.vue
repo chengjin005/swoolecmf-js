@@ -1,7 +1,7 @@
 <template>
   <div class="page-header-index-wide page-header-wrapper-grid-content-main">
     <a-row :gutter="24">
-      <a-col :md="24" :lg="7">
+      <a-col :md="24" :lg="24">
         <a-card :bordered="false">
           <div class="account-center-avatarHolder">
             <div class="avatar">
@@ -76,19 +76,6 @@
               </div>
             </a-spin>
           </div>
-        </a-card>
-      </a-col>
-      <a-col :md="24" :lg="17">
-        <a-card
-          style="width:100%"
-          :bordered="false"
-          :tabList="tabListNoTitle"
-          :activeTabKey="noTitleKey"
-          @tabChange="key => handleTabChange(key, 'noTitleKey')"
-        >
-          <article-page v-if="noTitleKey === 'article'"></article-page>
-          <app-page v-else-if="noTitleKey === 'app'"></app-page>
-          <project-page v-else-if="noTitleKey === 'project'"></project-page>
         </a-card>
       </a-col>
     </a-row>

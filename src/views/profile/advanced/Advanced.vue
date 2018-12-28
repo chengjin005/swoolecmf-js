@@ -21,6 +21,7 @@
             <span class="table-page-search-submitButtons">
               <a-button type="primary">查询</a-button>
               <a-button style="margin-left: 8px">重置</a-button>
+              <a-button type="normal" icon="plus" style="margin-left: 8px">新增角色</a-button>
             </span>
           </a-col>
         </a-row>
@@ -52,24 +53,13 @@
         </a-row>
       </div>
       <span slot="action" slot-scope="text, record">
+        <a @click="$refs.modal.setjur(record)">权限设置</a>
+        <a-divider type="vertical" />
+        <a @click="$refs.modal.adminmem(record)">成员管理</a>
+        <a-divider type="vertical" />
         <a @click="$refs.modal.edit(record)">编辑</a>
         <a-divider type="vertical" />
-        <a-dropdown>
-          <a class="ant-dropdown-link">
-            更多 <a-icon type="down" />
-          </a>
-          <a-menu slot="overlay">
-            <a-menu-item>
-              <a href="javascript:;">详情</a>
-            </a-menu-item>
-            <a-menu-item>
-              <a href="javascript:;">禁用</a>
-            </a-menu-item>
-            <a-menu-item>
-              <a href="javascript:;">删除</a>
-            </a-menu-item>
-          </a-menu>
-        </a-dropdown>
+        <a @click="$refs.modal.del(record)">删除</a>
       </span>
     </s-table>
 
@@ -118,10 +108,10 @@
           {
             title: '创建时间',
             dataIndex: 'createTime',
-            sorter: true
+            // sorter: true
           }, {
             title: '操作',
-            width: '150px',
+            // width: '150px',
             dataIndex: 'action',
             scopedSlots: { customRender: 'action' },
           }

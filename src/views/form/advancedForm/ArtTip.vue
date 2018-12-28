@@ -1,7 +1,7 @@
 <template>
   <a-modal
-    title="操作"
-    :width="800"
+    title="编辑分类"
+    :width="450"
     :visible="visible"
     :confirmLoading="confirmLoading"
     @ok="handleOk"
@@ -13,64 +13,10 @@
         <a-form-item
           :labelCol="labelCol"
           :wrapperCol="wrapperCol"
-          label='唯一识别码'
+          label='分类名'
           hasFeedback
         >
-          <a-input placeholder='唯一识别码' disabled="disabled" v-decorator="[ 'id', {rules: []} ]" />
-        </a-form-item>
-
-        <a-form-item
-          :labelCol="labelCol"
-          :wrapperCol="wrapperCol"
-          label='角色名称'
-          hasFeedback >
-          <a-input placeholder='起一个名字' v-decorator="[ 'name', {rules: [{ required: true, message: '不起一个名字吗？' }] }]" />
-        </a-form-item>
-
-        <a-form-item
-          :labelCol="labelCol"
-          :wrapperCol="wrapperCol"
-          label='状态'
-          hasFeedback >
-          <a-select v-decorator="[ 'status', {rules: []} ]">
-            <a-select-option :value="1">正常</a-select-option>
-            <a-select-option :value="2">禁用</a-select-option>
-          </a-select>
-        </a-form-item>
-
-        <a-form-item
-          :labelCol="labelCol"
-          :wrapperCol="wrapperCol"
-          label='描述'
-          hasFeedback
-        >
-          <a-textarea :rows="5" placeholder="..." v-decorator="[ 'describe', { rules: [] } ]" />
-        </a-form-item>
-
-        <a-divider/>
-
-        <a-form-item
-          :labelCol="labelCol"
-          :wrapperCol="wrapperCol"
-          label='拥有权限'
-          hasFeedback
-        >
-          <a-row :gutter="16" v-for="(permission, index) in permissions" :key="index">
-            <a-col :span="4">
-              {{ permission.name }}：
-            </a-col>
-            <a-col :span="20">
-              <a-checkbox
-                v-if="permission.actionsOptions.length > 0"
-                :indeterminate="permission.indeterminate"
-                :checked="permission.checkedAll"
-                @change="onChangeCheckAll($event, permission)">
-                全选
-              </a-checkbox>
-              <a-checkbox-group :options="permission.actionsOptions" v-model="permission.selected" @change="onChangeCheck(permission)" />
-            </a-col>
-          </a-row>
-
+          <a-input placeholder='' v-decorator="[ 'id', {rules: []} ]" />
         </a-form-item>
       </a-form>
     </a-spin>
@@ -113,22 +59,9 @@
         this.mdl = Object.assign({}, record)
         this.visible = true
 
-        // 有权限表，处理勾选
-        if (this.mdl.permissions && this.permissions) {
-          // 先处理要勾选的权限结构
-          const permissionsAction = {}
-          this.mdl.permissions.forEach(permission => {
-            permissionsAction[permission.permissionId] = permission.actionEntitySet.map(entity => entity.action)
-          })
-          // 把权限表遍历一遍，设定要勾选的权限 action
-          this.permissions.forEach(permission => {
-            permission.selected = permissionsAction[permission.id]
-          })
-        }
-
-        this.$nextTick(() => {
-          this.form.setFieldsValue(pick(this.mdl, 'id', 'name', 'status', 'describe'))
-        })
+        // this.$nextTick(() => {
+        //   this.form.setFieldsValue(pick(this.mdl, 'id', 'name', 'status', 'describe'))
+        // })
         console.log('this.mdl', this.mdl)
 
       },
